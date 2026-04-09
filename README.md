@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📊 Financial Intelligence System using RAG + Analytics
 
 ## 1. Introduction
@@ -26,7 +25,7 @@ flowchart TD
 A[User Query] --> B[LLM Query Understanding]
 B --> C[Extract Company + Intent]
 
-C --> D{Cache Check (24 hrs)}
+C --> D{Cache Check (24 hrs TTL)}
 
 D -->|Cache Valid| E[Load Data from Cache]
 D -->|Cache Expired / Not Present| F[Fetch Data from API]
@@ -51,13 +50,15 @@ O --> P[LLM (GPT-4o mini)]
 P --> Q[Final Answer]
 ```
 
+> This architecture ensures efficient data handling using caching while maintaining a fully query-driven retrieval system.
+
 ---
 
 ## 4. Key Design Flow
 
 ### Step 1: Query Understanding
 
-* User query is passed to LLM
+* User query is passed to the LLM
 * LLM extracts:
 
   * Company name
@@ -65,72 +66,75 @@ P --> Q[Final Answer]
 
 ---
 
-### Step 2: Cache Mechanism (24-hour Refresh)
+### Step 2: Cache Mechanism (24-hour TTL)
 
 * System checks:
 
-  * If data exists in cache
-  * If last update is within 24 hours
+  * Whether data exists in cache
+  * Whether last update is within 24 hours
 
 #### If cache is valid:
 
-* Use existing data
-* Avoid API calls
+* Load data directly from cache
+* Avoid API calls and recomputation
 
 #### If cache expired:
 
-* Fetch fresh data
-* Update CSV
+* Fetch fresh data from API
+* Update CSV storage
 * Recompute analytics
+
+> Cached data prevents repeated API calls and avoids unnecessary recomputation of analytics.
 
 ---
 
 ### Step 3: Data Preparation
 
-* Raw financial data fetched (5 years history)
-* Analytics computed:
+* Fetch 5 years of historical stock data
+* Compute financial metrics:
 
-  * Growth
+  * 1-year growth
+  * 5-year growth
   * Volatility
-  * Returns
+  * Average return
 
 ---
 
 ### Step 4: Unified Document Creation
 
-Both are combined:
+Both are combined into a single knowledge source:
 
 * Raw financial data
 * Computed analytics
 
 Converted into:
 
-👉 Text documents → chunked → embedded
+👉 Text → Chunking → Embeddings
 
 ---
 
 ### Step 5: Vector Storage
 
 * Stored in ChromaDB
-* Enables semantic retrieval
+* Enables semantic similarity-based retrieval
+
+> Embeddings are regenerated only when new data is fetched, ensuring consistency between stored data and vector representations.
 
 ---
 
 ### Step 6: Retrieval (RAG)
 
-* Query → embedding
+* Query is converted into embedding
 * Top-K relevant chunks retrieved
-* Only relevant portions passed to LLM
+* Only relevant context is passed to the LLM
 
 ---
 
 ### Step 7: Response Generation
 
-* LLM generates answer using:
-
-  * Retrieved context
-* No direct injection of analytics
-* Fully retrieval-driven system
+* LLM generates answer using retrieved context
+* Fully retrieval-driven response generation
+* No direct injection of analytics into prompt
 
 ---
 
@@ -160,7 +164,7 @@ Converted into:
 
 * Uses Pandas for deterministic computation
 * Converts structured metrics into text format
-* Stored alongside raw data
+* Stored alongside raw data in vector DB
 
 ---
 
@@ -174,11 +178,12 @@ Converted into:
 ### LLM Layer
 
 * Model: GPT-4o mini
-* Temperature = 0
-* Used for:
+* Temperature = 0 (deterministic output)
 
-  * Query understanding
-  * Final response generation
+Used for:
+
+* Query understanding
+* Final response generation
 
 ---
 
@@ -196,14 +201,15 @@ Converted into:
 
 * Reduces API calls
 * Improves latency
-* Ensures data consistency within a defined time window
+* Prevents repeated computation
+* Ensures data freshness within a defined time window
 
 ---
 
 ### Why LLM for Query Understanding?
 
-* Handles flexible user queries
-* Avoids rigid rule-based mapping
+* Handles flexible and natural language queries
+* Eliminates need for rigid rule-based mapping
 * Supports multi-intent queries
 
 ---
@@ -214,14 +220,14 @@ Converted into:
 * Unified knowledge base (raw + analytics)
 * Reduced prompt noise
 * Efficient via caching
-* Scalable architecture
+* Scalable and modular architecture
 
 ---
 
 ## 9. Limitations
 
 * Re-embedding required when data updates
-* Retrieval quality depends on chunking
+* Retrieval quality depends on chunking strategy
 * No real-time streaming data
 * LLM dependency for query parsing
 
@@ -230,8 +236,8 @@ Converted into:
 ## 10. Future Improvements
 
 * Incremental embedding updates
-* Multi-company query support
-* Visualization dashboard
+* Multi-company query handling
+* Visualization dashboard (Streamlit)
 * Advanced query decomposition
 * Hybrid structured + vector retrieval
 
