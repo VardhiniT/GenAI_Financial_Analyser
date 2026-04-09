@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📊 Financial Intelligence System using RAG + Analytics
 
 ## 1. Introduction
