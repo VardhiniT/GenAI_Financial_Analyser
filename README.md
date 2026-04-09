@@ -25,20 +25,20 @@ flowchart TD
 A[User Query] --> B[LLM Query Understanding]
 B --> C[Extract Company + Intent]
 
-C --> D{Cache Check (24 hrs TTL)}
+C --> D{Cache Check - 24 hrs TTL}
 
 D -->|Cache Valid| E[Load Data from Cache]
 D -->|Cache Expired / Not Present| F[Fetch Data from API]
 
-F --> G[Store/Update CSV (5 yrs)]
-G --> H[Compute Analytics (Pandas)]
+F --> G[Store/Update CSV - 5 yrs]
+G --> H[Compute Analytics - Pandas]
 
 E --> H
 
-H --> I[Convert to Text (Raw + Analytics)]
+H --> I[Convert to Text - Raw + Analytics]
 I --> J[Chunking]
-J --> K[Embeddings (HuggingFace)]
-K --> L[Vector DB (ChromaDB)]
+J --> K[Embeddings - HuggingFace]
+K --> L[Vector DB - ChromaDB]
 
 A --> M[Retriever]
 L --> M
@@ -46,7 +46,7 @@ L --> M
 M --> N[Top-K Relevant Chunks]
 
 N --> O[Prompt Construction]
-O --> P[LLM (GPT-4o mini)]
+O --> P[LLM - GPT-4o mini]
 P --> Q[Final Answer]
 ```
 
