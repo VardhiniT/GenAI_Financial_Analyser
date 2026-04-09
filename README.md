@@ -28,7 +28,7 @@ B --> C[Extract Company + Intent]
 C --> D{Cache Check - 24 hrs TTL}
 
 D -->|Cache Valid| E[Load Data from Cache]
-D -->|Cache Expired / Not Present| F[Fetch Data from API]
+D -->|Cache Expired| F[Fetch Data from API]
 
 F --> G[Store/Update CSV - 5 yrs]
 G --> H[Compute Analytics - Pandas]
