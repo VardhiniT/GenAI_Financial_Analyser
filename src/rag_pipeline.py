@@ -1,3 +1,5 @@
+#rag_pipeline.py
+
 from langchain_community.vectorstores import Chroma
 from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
