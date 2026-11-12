@@ -1,3 +1,4 @@
+#company_mapper.py
 def get_ticker_from_query(query):
 
     query = query.lower()
