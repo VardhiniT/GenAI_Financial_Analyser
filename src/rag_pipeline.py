@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 import os
-print("KEY:", os.getenv("OPENAI_API_KEY"))
+
 
 def run_rag():
 
