@@ -1,3 +1,5 @@
+#vector_store.py
+
 from langchain_community.vectorstores import Chroma
 
 def create_vector_store(texts, embeddings):
